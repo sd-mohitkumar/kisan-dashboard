@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>स्मार्ट मंडी - किसान डैशबोर्ड</title>
+    
+    <style>
+        /* पूरे पेज का डिज़ाइन */
+        body {
+            background-color: #fdf8f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #d97706;
+            border-bottom: 3px solid #f59e0b;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        /* Task 2: CSS Grid का इस्तेमाल लेआउट के लिए */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* दो बराबर हिस्से */
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* बॉक्स का डिज़ाइन */
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+            border-top: 5px solid #16a34a;
+        }
+
+        .card h2 {
+            color: #166534;
+            margin-top: 0;
+        }
+
+        /* फॉर्म का डिज़ाइन */
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #16a34a;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #15803d;
+        }
+
+        /* फसल डायरी (To-Do List) का डिज़ाइन */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #f0fdf4;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #22c55e;
+        }
+
+        .delete-btn {
+            background-color: #dc2626;
+            width: auto;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+
+        .delete-btn:hover {
+            background-color: #b91c1c;
+        }
+
+        /* Task 2: Responsive Layout (Media Query) मोबाइल के लिए */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr; /* मोबाइल में एक के नीचे एक दिखेगा */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🌾 स्मार्ट मंडी एवं फसल डायरी</h1>
+        <p>मंडी के ताज़ा भाव जानें और अपनी फसल का हिसाब रखें।</p>
+    </div>
+
+    <div class="dashboard-container">
+
+        <div class="card">
+            <h2>📞 किसान सहायता केंद्र</h2>
+            <p style="font-size: 14px; color: #555;">कृषि विशेषज्ञों से सवाल पूछें:</p>
+            
+            <form id="helpForm" onsubmit="return validateForm(event)">
+                <input type="text" id="kisanName" placeholder="अपना नाम लिखें">
+                <input type="number" id="kisanMobile" placeholder="10-अंकों का मोबाइल नंबर">
+                <textarea id="kisanMessage" rows="3" placeholder="अपनी समस्या या सवाल लिखें..."></textarea>
+                <button type="submit">मैसेज भेजें</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>📝 डिजिटल फसल डायरी</h2>
+            <p style="font-size: 14px; color: #555;">आज खेत में क्या काम करना है, यहाँ लिखें:</p>
+            
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <input type="text" id="taskInput" placeholder="जैसे: खेत में यूरिया डालना है..." style="margin-bottom: 0;">
+                <button type="button" onclick="addTask()" style="width: auto;">जोड़ें</button>
+            </div>
+
+            <ul id="taskList">
+                </ul>
+        </div>
+
+    </div>
+
+    <script>
+        // 1. Form Validation (फॉर्म की जांच)
+        function validateForm(event) {
+            event.preventDefault(); // पेज को रीलोड होने से रोकना
+            
+            let name = document.getElementById("kisanName").value;
+            let mobile = document.getElementById("kisanMobile").value;
+            let message = document.getElementById("kisanMessage").value;
+
+            if (name === "" || mobile === "" || message === "") {
+                alert("कृपया फॉर्म के सभी खाली स्थान भरें!");
+                return false;
+            }
+
+            if (mobile.length !== 10) {
+                alert("कृपया सही 10-अंकों का मोबाइल नंबर डालें!");
+                return false;
+            }
+
+            alert("धन्यवाद " + name + "! आपकी समस्या हमारे पास पहुँच गई है। विशेषज्ञ जल्द संपर्क करेंगे।");
+            document.getElementById("helpForm").reset(); // फॉर्म खाली करना
+        }
+
+        // 2. Dynamic To-Do List (फसल डायरी)
+        function addTask() {
+            let taskInput = document.getElementById("taskInput");
+            let taskText = taskInput.value;
+
+            if (taskText === "") {
+                alert("कृपया काम का नाम लिखें!");
+                return;
+            }
+
+            // नया लिस्ट आइटम (li) बनाना
+            let li = document.createElement("li");
+            li.innerHTML = `<span>${taskText}</span> <button class="delete-btn" onclick="deleteTask(this)">हटाएं</button>`;
+
+            // लिस्ट में जोड़ना
+            document.getElementById("taskList").appendChild(li);
+            
+            // इनपुट बॉक्स को खाली करना
+            taskInput.value = "";
+        }
+
+        function deleteTask(buttonElement) {
+            // जिस 'हटाएं' बटन पर क्लिक हुआ है, उस पूरे आइटम को डिलीट करना
+            let li = buttonElement.parentElement;
+            li.remove();
+        }
+    </script>
+
+</body>
+</html>
